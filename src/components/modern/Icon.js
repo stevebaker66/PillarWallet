@@ -60,6 +60,7 @@ import IconInfo from 'assets/icons/svg/icon-24-info.svg';
 import IconInvestment from 'assets/icons/svg/icon-24-investment.svg';
 import IconKey from 'assets/icons/svg/icon-24-key.svg';
 import IconLifebuoy from 'assets/icons/svg/icon-24-lifebuoy.svg';
+import IconLineChart from 'assets/icons/svg/icon-24-line-chart.svg';
 import IconLiquidityPool from 'assets/icons/svg/icon-24-liquidity-pool.svg';
 import IconLogout from 'assets/icons/svg/icon-24-logout.svg';
 import IconMail from 'assets/icons/svg/icon-24-mail.svg';
@@ -70,6 +71,7 @@ import IconNote from 'assets/icons/svg/icon-24-note.svg';
 import IconPending from 'assets/icons/svg/icon-24-pending.svg';
 import IconPercentCircle from 'assets/icons/svg/icon-24-percent-circle.svg';
 import IconPhone from 'assets/icons/svg/icon-24-phone.svg';
+import IconPieChart from 'assets/icons/svg/icon-24-pie-chart.svg';
 import IconPlus from 'assets/icons/svg/icon-24-plus.svg';
 import IconProfile from 'assets/icons/svg/icon-48-profile.svg';
 import IconPower from 'assets/icons/svg/icon-24-power.svg';
@@ -132,6 +134,7 @@ const components = {
   investment: IconInvestment,
   key: IconKey,
   lifebuoy: IconLifebuoy,
+  'line-chart': IconLineChart,
   'liquidity-pool': IconLiquidityPool,
   logout: IconLogout,
   mail: IconMail,
@@ -142,6 +145,7 @@ const components = {
   pending: IconPending,
   'percent-circle': IconPercentCircle,
   phone: IconPhone,
+  'pie-chart': IconPieChart,
   plus: IconPlus,
   profile: IconProfile,
   power: IconPower,

@@ -56,6 +56,22 @@ function ChartsSection({ balancePerCategory, balancePerChain }: Props) {
     setCurrentPage(clamp(page, 0, 1));
   };
 
+  // const [showPriceChart, setShowPriceChart] = React.useState(false);
+
+
+
+    // const handleTogglePriceChart = () => {
+    //   LayoutAnimation.configureNext(SCALE_XY);
+    //   setShowPriceChart(!showPriceChart);
+    // };
+
+
+        // <Controls
+        //   showSideChains={showSideChains}
+        //   onToggleSideChains={handleToggleSideChains}
+        //   showPriceChart={showPriceChart}
+        //   onTogglePriceChart={handleTogglePriceChart} />
+
   return (
     <Container>
       <PagerView ref={pagerRef} onPageScroll={handlePageScroll} style={styles.pageView}>
