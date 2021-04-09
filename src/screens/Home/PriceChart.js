@@ -21,9 +21,6 @@
 import * as React from 'react';
 import styled from 'styled-components/native';
 
-//
-import Text from 'components/modern/Text';
-
 // Utils
 import { BigNumber } from 'utils/common';
 import { formatPercentValue } from 'utils/format';
@@ -32,24 +29,49 @@ import { fontSizes } from 'utils/variables';
 import { useAssetCategoriesConfig } from 'utils/uiConfig';
 
 // Types
-import type { CategoryBalances } from 'models/Home';
 
-type Props = {|
-|};
+// Local
+import SmallButton from './components/SmallButton';
+
+type Props = {||};
 
 function PriceChart(props: Props) {
+  const [activeInterval, setActiveInterval] = React.useState<?number>(7);
+
+  const intervals = [
+    { value: 1, title: '1 D' },
+    { value: 7, title: '7 D' },
+    { value: 30, title: '30 D' },
+    { value: 182, title: '6 M' },
+    { value: 365, title: '1 Y' },
+    { value: null, title: 'ALL' },
+  ];
+
   return (
     <Container>
-      <Text>Price chart</Text>
+      <IntervalContainer>
+        {intervals.map(({ value, title }) => (
+          <SmallButton
+            key={title}
+            title={title}
+            onPress={() => setActiveInterval(value)}
+            active={value === activeInterval}
+          />
+        ))}
+      </IntervalContainer>
     </Container>
   );
 }
 
 export default PriceChart;
 
-
 const Container = styled.View`
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: stretch;
   height: 320px;
+`;
+
+const IntervalContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
 `;
