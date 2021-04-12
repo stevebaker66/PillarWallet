@@ -97,8 +97,6 @@ function Home() {
           accountTotalBalances={accountTotalBalances}
           accountCollectibleCounts={accountCollectibleCounts}
         />
-
-        <AssetsSection chainSummaries={chainSummaries} chainBalances={chainsBalances} showSideChains={showSideChains} />
       </Content>
 
       <FloatingActions />

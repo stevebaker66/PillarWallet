@@ -37,3 +37,14 @@ export function calculateTotalCollectibleCount(accountCollectibleCounts: ChainRe
   const counts = recordValues(accountCollectibleCounts);
   return counts.reduce((total, count) => (count != null ? total + count : total), 0);
 }
+
+// export type PriceChartDatum = {|
+//   timestamp: string, // YYYY-MM-DD
+//   balance: number,
+// |};
+
+// export function usePriceChartData(days: ?number): PriceChartDatum {
+//   if (!days) return priceChartData;
+
+//   return priceChartData.slice(-days);
+// }

@@ -94,6 +94,7 @@ export const lightThemeColorsOld = {
   buttonTextTitle: lightThemeColors.basic000,
   pagerActive: '#000000',
   pagerInactive: '#d4d9db',
+  lineChartLine: lightThemeColors.basic000,
 };
 
 // will be removed after transition
@@ -157,6 +158,7 @@ export const darkThemeColorsOld = {
   buttonTextTitle: darkThemeColors.basic000,
   pagerActive: darkThemeColors.basic010,
   pagerInactive: '#4D4D4D',
+  lineChartLine: darkThemeColors.primaryAccent130,
 };
 
 export const themedColors = {

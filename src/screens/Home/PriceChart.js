@@ -19,6 +19,7 @@
 */
 
 import * as React from 'react';
+import { VictoryChart, VictoryLine } from 'victory-native';
 import styled from 'styled-components/native';
 
 // Utils
@@ -32,11 +33,16 @@ import { useAssetCategoriesConfig } from 'utils/uiConfig';
 
 // Local
 import SmallButton from './components/SmallButton';
+import { usePriceChartData } from './utils';
 
 type Props = {||};
 
 function PriceChart(props: Props) {
   const [activeInterval, setActiveInterval] = React.useState<?number>(7);
+
+  const chartData = usePriceChartData(activeInterval).map(({ balance, timestamp }) => ({ x: timestamp, y: balance }));
+
+  const colors = useThemeColors();
 
   const intervals = [
     { value: 1, title: '1 D' },
@@ -49,6 +55,13 @@ function PriceChart(props: Props) {
 
   return (
     <Container>
+      <VictoryChart>
+        <VictoryLine
+          data={chartData}
+          interpolation="natural"
+          style={{ data: { stroke: colors.lineChartLine, strokeWidth: 2.4, strokeLinecap: 'round' } }}
+        />
+      </VictoryChart>
       <IntervalContainer>
         {intervals.map(({ value, title }) => (
           <SmallButton
