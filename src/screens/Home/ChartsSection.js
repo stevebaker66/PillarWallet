@@ -19,7 +19,7 @@
 */
 
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, LayoutAnimation } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import styled from 'styled-components/native';
 import { BigNumber } from 'bignumber.js';
@@ -28,13 +28,19 @@ import { clamp } from 'lodash';
 // Components
 import PagerControl from 'components/modern/PagerControl';
 
+// Utils
+import { SCALE_XY } from 'utils/layoutAnimations';
+import { spacing } from 'utils/variables';
+
 // Types
 import type { ChainRecord } from 'models/Chain';
 import type { CategoryRecord } from 'models/TotalBalances';
 
 // Local
+import IconButton from './components/IconButton';
 import AssetPieChart from './components/AssetPieChart';
 import ChainPieChart from './components/ChainPieChart';
+import ValueLineChart from './components/ValueLineChart';
 
 type Props = {|
   balancePerCategory: CategoryRecord<BigNumber>,
@@ -45,6 +51,7 @@ function ChartsSection({ balancePerCategory, balancePerChain }: Props) {
   const pagerRef = React.useRef<any>();
 
   const [currentPage, setCurrentPage] = React.useState(0);
+  const [showPriceChart, setShowPriceChart] = React.useState(false);
 
   const handleChangePage = (page: number) => {
     setCurrentPage(page);
@@ -56,33 +63,35 @@ function ChartsSection({ balancePerCategory, balancePerChain }: Props) {
     setCurrentPage(clamp(page, 0, 1));
   };
 
-  // const [showPriceChart, setShowPriceChart] = React.useState(false);
-
-
-
-    // const handleTogglePriceChart = () => {
-    //   LayoutAnimation.configureNext(SCALE_XY);
-    //   setShowPriceChart(!showPriceChart);
-    // };
-
-
-        // <Controls
-        //   showSideChains={showSideChains}
-        //   onToggleSideChains={handleToggleSideChains}
-        //   showPriceChart={showPriceChart}
-        //   onTogglePriceChart={handleTogglePriceChart} />
+  const togglePriceChart = () => {
+    LayoutAnimation.configureNext(SCALE_XY);
+    setShowPriceChart(!showPriceChart);
+  };
 
   return (
     <Container>
-      <PagerView ref={pagerRef} onPageScroll={handlePageScroll} style={styles.pageView}>
-        <View key="assets" collapsable={false}>
-          <AssetPieChart balancePerCategory={balancePerCategory} />
-        </View>
-        <View key="chains" collapsable={false}>
-          <ChainPieChart balancePerChain={balancePerChain} />
-        </View>
-      </PagerView>
-      <PagerControl pageCount={2} currentPage={currentPage} onChangePage={handleChangePage} />
+      {!showPriceChart && (
+        <PieChartView>
+          <PagerView ref={pagerRef} onPageScroll={handlePageScroll} style={styles.pageView}>
+            <View key="assets" collapsable={false}>
+              <AssetPieChart balancePerCategory={balancePerCategory} />
+            </View>
+            <View key="chains" collapsable={false}>
+              <ChainPieChart balancePerChain={balancePerChain} />
+            </View>
+          </PagerView>
+          <PagerControl
+            pageCount={2}
+            currentPage={currentPage}
+            onChangePage={handleChangePage}
+          />
+        </PieChartView>
+      )}
+      {showPriceChart && <ValueLineChart />}
+
+      <ControlsContainer>
+        <IconButton iconName={showPriceChart ? 'line-chart' : 'pie-chart'} onPress={() => togglePriceChart()} />
+      </ControlsContainer>
     </Container>
   );
 }
@@ -96,3 +105,11 @@ const styles = {
 };
 
 const Container = styled.View``;
+
+const PieChartView = styled.View``;
+
+const ControlsContainer = styled.View`
+  position: absolute;
+  left: ${spacing.medium}px;
+  bottom: 0;
+`;

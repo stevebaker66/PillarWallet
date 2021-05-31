@@ -34,9 +34,10 @@ type Props = {|
   currentPage: number,
   onChangePage: (number) => mixed,
   style?: ViewStyleProp,
+  renderLeft?: () => React.Node,
 |};
 
-function PagerControl({ pageCount, currentPage, onChangePage, style }: Props) {
+function PagerControl({ pageCount, currentPage, onChangePage, style, renderLeft }: Props) {
   if (pageCount <= 0) return null;
 
   return (
@@ -46,6 +47,7 @@ function PagerControl({ pageCount, currentPage, onChangePage, style }: Props) {
           {page === currentPage ? <ActiveDot /> : <Dot />}
         </TouchableOpacity>
       ))}
+      {!!renderLeft && <LeftFloat>{renderLeft()}</LeftFloat>}
     </Container>
   );
 }
@@ -73,3 +75,8 @@ const ActiveDot = styled.View`
   margin: ${spacing.medium}px ${spacing.small / 2}px;
   background-color: ${({ theme }) => theme.colors.pagerActive};
 `;
+
+const LeftFloat = styled.View`
+
+`;
+
