@@ -135,6 +135,8 @@ const Graph = ({
   const renderTooltip = (tooltipX: number, tooltipY: number) => {
     const content = getTooltipContents(safeActiveDataPoint);
 
+    if (!content) return null;
+
     const tooltipWidth = 80;
     const tooltipHeight = 40;
     const tipHeight = 7;

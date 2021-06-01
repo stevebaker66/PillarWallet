@@ -38,6 +38,7 @@ import { spacing } from 'utils/variables';
 type DataPoint = {
   date: Date,
   value: number, // in current fiat currency
+  hideTooltip?: boolean,
 };
 
 type Props = {
@@ -99,7 +100,7 @@ const ValueOverTimeGraph = ({
 
   const timeRangeStart = timeRanges[activeTimeRange].getTimeRangeStart();
 
-  const filteredData = data.filter(({ date }) => !isBefore(date, timeRangeStart));
+  const filteredData = prepareData(data, timeRangeStart);
 
   const values = filteredData.map((p) => p.value);
   let maxY = Math.max(...values);
@@ -114,7 +115,9 @@ const ValueOverTimeGraph = ({
   }));
 
   const getTooltipContents = (activeDataPoint: number) => {
-    const { date, value } = filteredData[activeDataPoint];
+    const { date, value, hideTooltip } = filteredData[activeDataPoint];
+    if (hideTooltip) return undefined;
+
     // eslint-disable-next-line i18next/no-literal-string
     return `${format(date, timeRanges[activeTimeRange].tooltipDateFormat)}\n${formatFiat(value, fiatCurrency)}`;
   };
@@ -146,6 +149,18 @@ const ValueOverTimeGraph = ({
 };
 
 export default ValueOverTimeGraph;
+
+const prepareData = (dataPoints: DataPoint[], timeRangeStart: Date): DataPoint[] => {
+  const matchingDataPoints = dataPoints.filter(point => !isBefore(point.date, timeRangeStart));
+
+  const addStartPoint = isBefore(timeRangeStart, matchingDataPoints[0].date);
+  if (addStartPoint) {
+    const startPoint = { date: timeRangeStart, value: matchingDataPoints[0].value, hideTooltip: true };
+    return [startPoint, ...matchingDataPoints];
+  }
+
+  return matchingDataPoints;
+};
 
 const IntervalContainer = styled.View`
   padding: 0 ${spacing.large}px;
