@@ -35,15 +35,14 @@ import { useFiatCurrency } from 'selectors';
 import { formatFiat, getDeviceWidth } from 'utils/common';
 import { spacing } from 'utils/variables';
 
-type DataPoint = {
+export type DataPoint = {|
   date: Date,
   value: number, // in current fiat currency
   hideTooltip?: boolean,
-};
+|};
 
 type Props = {
   data: DataPoint[],
-  fiatCurrency: string,
   onGestureStart?: () => void,
   onGestureEnd?: () => void,
 };
@@ -100,22 +99,11 @@ const ValueOverTimeGraph = ({
 
   const timeRangeStart = timeRanges[activeTimeRange].getTimeRangeStart();
 
-  const filteredData = prepareData(data, timeRangeStart);
-
-  const values = filteredData.map((p) => p.value);
-  let maxY = Math.max(...values);
-  const minY = Math.min(...values);
-  if (maxY === minY) maxY = minY + 1;
-  const maxX = timeRangeEnd;
-  const minX = timeRangeStart.getTime();
-
-  const processedData = filteredData.map(({ value, date }) => ({
-    x: (date.getTime() - minX) / (maxX - minX),
-    y: (value - minY) / (maxY - minY),
-  }));
+  const timeRangeData = getTimeRangeData(data, timeRangeStart);
+  const graphData = mapDataPointsToGraphData(timeRangeData, timeRangeStart, timeRangeEnd);
 
   const getTooltipContents = (activeDataPoint: number) => {
-    const { date, value, hideTooltip } = filteredData[activeDataPoint];
+    const { date, value, hideTooltip } = timeRangeData[activeDataPoint];
     if (hideTooltip) return undefined;
 
     // eslint-disable-next-line i18next/no-literal-string
@@ -126,8 +114,8 @@ const ValueOverTimeGraph = ({
     <View>
       <Graph
         width={screenWidth}
-        height={200}
-        data={processedData}
+        height={260}
+        data={graphData}
         getTooltipContents={getTooltipContents}
         extra={activeTimeRange}
       />
@@ -150,7 +138,7 @@ const ValueOverTimeGraph = ({
 
 export default ValueOverTimeGraph;
 
-const prepareData = (dataPoints: DataPoint[], timeRangeStart: Date): DataPoint[] => {
+const getTimeRangeData = (dataPoints: DataPoint[], timeRangeStart: Date): DataPoint[] => {
   const matchingDataPoints = dataPoints.filter(point => !isBefore(point.date, timeRangeStart));
 
   const addStartPoint = isBefore(timeRangeStart, matchingDataPoints[0].date);
@@ -160,6 +148,26 @@ const prepareData = (dataPoints: DataPoint[], timeRangeStart: Date): DataPoint[]
   }
 
   return matchingDataPoints;
+};
+
+const mapDataPointsToGraphData = (dataPoints: DataPoint[], timeRangeStart: Date, timeRangeEnd: Date) => {
+  const values = dataPoints.map((p) => p.value);
+
+  let minY = Math.min(...values);
+  let maxY = Math.max(...values);
+
+  if (maxY === minY) {
+    minY -= 0.25;
+    maxY += 0.75;
+  }
+
+  const minX = timeRangeStart.getTime();
+  const maxX = timeRangeEnd;
+
+  return dataPoints.map(({ value, date }) => ({
+    x: (date.getTime() - minX) / (maxX - minX),
+    y: (value - minY) / (maxY - minY),
+  }));
 };
 
 const IntervalContainer = styled.View`

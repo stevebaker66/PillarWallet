@@ -88,7 +88,7 @@ function ChartsSection({ balancePerCategory, balancePerChain }: Props) {
           />
         </PieChartView>
       )}
-      {showValueChart && <ValueLineChart style={styles.valueLineChart} />}
+      {showValueChart && <ValueLineChart />}
 
       <ControlsContainer>
         <IconButton iconName={showValueChart ? 'pie-chart' : 'line-chart'} onPress={() => togglePriceChart()} />

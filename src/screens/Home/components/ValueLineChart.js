@@ -19,21 +19,14 @@
 */
 
 import * as React from 'react';
-import { VictoryChart, VictoryLine } from 'victory-native';
 import styled from 'styled-components/native';
-import { useTranslationWithPrefix } from 'translations/translate';
 
 // Controls
-import ValueOverTimeGraph from 'components/modern/ValueOverTimeGraph';
+import ValueOverTimeGraph, { type DataPoint } from 'components/modern/ValueOverTimeGraph';
 
-// Utils
-import { useThemeColors } from 'utils/themes';
 
 // Types
 import type { ViewStyleProp } from 'utils/types/react-native';
-
-// Local
-import SmallButton from './SmallButton';
 
 import priceChartData from '../mockData.json';
 
@@ -42,24 +35,10 @@ type Props = {|
 |};
 
 function ValueLineChart({ style }: Props) {
-  const { t } = useTranslationWithPrefix('home.charts.value');
-
-  const [activeInterval, setActiveInterval] = React.useState<?number>(7);
-
-  const chartData = usePriceChartData();
-
-  const colors = useThemeColors();
-
-  const intervals = [
-    { value: 7, title: t('7days') },
-    { value: 30, title: t('30days') },
-    { value: 182, title: t('6months') },
-    { value: 365, title: t('1year') },
-    { value: null, title: t('all') },
-  ];
+  const chartData = useValueChartData();
 
   return (
-    <Container>
+    <Container style={style}>
       <ValueOverTimeGraph data={chartData} />
     </Container>
   );
@@ -67,36 +46,18 @@ function ValueLineChart({ style }: Props) {
 
 export default ValueLineChart;
 
-export type DataPoint = {|
-  date: Date,
-  value: number,
-|};
-
-export function usePriceChartData(): DataPoint[] {
+export function useValueChartData(): DataPoint[] {
   const dataPoints = priceChartData.map(point => ({
     date: new Date(point.timestamp),
     value: point.balance,
   }));
 
-  console.log("AAA", dataPoints);
-
   return dataPoints;
 }
-
-const styles = {
-  chart: {
-    height: 300,
-  },
-};
 
 const Container = styled.View`
   justify-content: flex-end;
   align-items: stretch;
   height: 340px;
-`;
-
-const IntervalContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
 `;
 
