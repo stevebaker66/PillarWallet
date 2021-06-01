@@ -68,31 +68,31 @@ const ValueOverTimeGraph = ({
     [WEEK]: {
       label: t('graph.timeRangeButtons.week'),
       getTimeRangeStart: () => subWeeks(timeRangeEnd, 1),
-      xAxisValuesCount: 8,
       tooltipDateFormat: 'D MMM',
     },
     [MONTH]: {
       label: t('graph.timeRangeButtons.month'),
       getTimeRangeStart: () => subDays(timeRangeEnd, 30),
-      xAxisValuesCount: 6,
       tooltipDateFormat: 'D MMM',
     },
     [HALF_YEAR]: {
       label: t('graph.timeRangeButtons.halfYear'),
       getTimeRangeStart: () => subMonths(timeRangeEnd, 6),
-      xAxisValuesCount: 6,
       tooltipDateFormat: 'D MMM',
     },
     [YEAR]: {
       label: t('graph.timeRangeButtons.year'),
       getTimeRangeStart: () => subYears(timeRangeEnd, 1),
-      xAxisValuesCount: 6,
+      tooltipDateFormat: 'D MMM',
+    },
+    tenYear: {
+      label: '5Y',
+      getTimeRangeStart: () => subYears(timeRangeEnd, 5),
       tooltipDateFormat: 'D MMM',
     },
     [ALL]: {
       label: t('graph.timeRangeButtons.all'),
       getTimeRangeStart: () => data[0].date,
-      xAxisValuesCount: 6,
       tooltipDateFormat: 'D MMM YYYY',
     },
   };
@@ -126,7 +126,6 @@ const ValueOverTimeGraph = ({
         height={200}
         data={processedData}
         getTooltipContents={getTooltipContents}
-        xAxisValuesCount={timeRanges[activeTimeRange].xAxisValuesCount}
         extra={activeTimeRange}
       />
 

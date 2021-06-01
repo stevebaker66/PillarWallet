@@ -80,6 +80,8 @@ const Graph = ({
   };
 
   const renderYAxis = () => {
+    if (!getYAxisValue) return null;
+
     const yAxisValuesCount = 3;
     const values = range(yAxisValuesCount).map(v => getYAxisValue?.((v + 1) / (yAxisValuesCount)));
 
@@ -102,6 +104,8 @@ const Graph = ({
   };
 
   const renderXAxis = () => {
+    if (!getXAxisValue) return null;
+
     const values = range(xAxisValuesCount).map(v => getXAxisValue?.(v / (xAxisValuesCount - 1)));
     const valueWidth = 55;
 
