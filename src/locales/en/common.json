@@ -595,6 +595,15 @@
       "send": "Send",
       "swap": "Swap",
       "connect": "Connect"
+    },
+    "charts": {
+      "value": {
+        "7days": "7 D",
+        "30days": "30 D",
+        "6months": "6 M",
+        "1year": "1 Y",
+        "all": "ALL"
+      }
     }
   },
 

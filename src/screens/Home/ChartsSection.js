@@ -51,7 +51,7 @@ function ChartsSection({ balancePerCategory, balancePerChain }: Props) {
   const pagerRef = React.useRef<any>();
 
   const [currentPage, setCurrentPage] = React.useState(0);
-  const [showPriceChart, setShowPriceChart] = React.useState(false);
+  const [showValueChart, setShowValueChart] = React.useState(false);
 
   const handleChangePage = (page: number) => {
     setCurrentPage(page);
@@ -65,12 +65,12 @@ function ChartsSection({ balancePerCategory, balancePerChain }: Props) {
 
   const togglePriceChart = () => {
     LayoutAnimation.configureNext(SCALE_XY);
-    setShowPriceChart(!showPriceChart);
+    setShowValueChart(!showValueChart);
   };
 
   return (
     <Container>
-      {!showPriceChart && (
+      {!showValueChart && (
         <PieChartView>
           <PagerView ref={pagerRef} onPageScroll={handlePageScroll} style={styles.pageView}>
             <View key="assets" collapsable={false}>
@@ -88,10 +88,10 @@ function ChartsSection({ balancePerCategory, balancePerChain }: Props) {
           />
         </PieChartView>
       )}
-      {showPriceChart && <ValueLineChart />}
+      {showValueChart && <ValueLineChart style={styles.valueLineChart} />}
 
       <ControlsContainer>
-        <IconButton iconName={showPriceChart ? 'line-chart' : 'pie-chart'} onPress={() => togglePriceChart()} />
+        <IconButton iconName={showValueChart ? 'pie-chart' : 'line-chart'} onPress={() => togglePriceChart()} />
       </ControlsContainer>
     </Container>
   );
@@ -106,6 +106,9 @@ const styles = {
   pagerControl: {
     height: 40,
   },
+  valueLineChart: {
+    paddingHorizontal: spacing.large,
+  },
 };
 
 const Container = styled.View``;
@@ -113,7 +116,7 @@ const Container = styled.View``;
 const PieChartView = styled.View``;
 
 const ControlsContainer = styled.View`
-  position: absolute;
-  left: ${spacing.medium}px;
-  bottom: 1px;
+  margin: ${spacing.mediumLarge}px ${spacing.large}px;
+  flex-direction: row;
+  align-items: flex-start;
 `;

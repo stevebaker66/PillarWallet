@@ -19,19 +19,93 @@
 */
 
 import * as React from 'react';
+import { VictoryChart, VictoryLine } from 'victory-native';
 import styled from 'styled-components/native';
+import { useTranslationWithPrefix } from 'translations/translate';
 
-function ValueLineChart() {
+// Utils
+import { useThemeColors } from 'utils/themes';
+
+// Types
+import type { ViewStyleProp } from 'utils/types/react-native';
+
+// Local
+import SmallButton from './SmallButton';
+
+import priceChartData from '../mockData.json';
+
+type Props = {|
+  style?: ViewStyleProp;
+|};
+
+function ValueLineChart({ style }: Props) {
+  const { t } = useTranslationWithPrefix('home.charts.value');
+
+  const [activeInterval, setActiveInterval] = React.useState<?number>(7);
+
+  const chartData = usePriceChartData(activeInterval).map(({ balance, timestamp }) => ({ x: timestamp, y: balance }));
+
+  const colors = useThemeColors();
+
+  const intervals = [
+    { value: 7, title: t('7days') },
+    { value: 30, title: t('30days') },
+    { value: 182, title: t('6months') },
+    { value: 365, title: t('1year') },
+    { value: null, title: t('all') },
+  ];
+
   return (
-    <Container>
+    <Container style={style}>
+      <VictoryChart height={300}>
+        <VictoryLine
+          data={chartData}
+          interpolation="natural"
+          style={{ data: { stroke: colors.lineChartLine, strokeWidth: 2.4, strokeLinecap: 'round' } }}
+        />
+      </VictoryChart>
+
+      <IntervalContainer>
+        {intervals.map(({ value, title }) => (
+          <SmallButton
+            key={title}
+            title={title}
+            onPress={() => setActiveInterval(value)}
+            active={value === activeInterval}
+          />
+        ))}
+      </IntervalContainer>
     </Container>
   );
 }
 
 export default ValueLineChart;
 
+export type PriceChartDatum = {|
+  timestamp: string, // YYYY-MM-DD
+  balance: number,
+|};
+
+export function usePriceChartData(days: ?number): PriceChartDatum[] {
+  if (!days) return priceChartData;
+
+  return priceChartData.slice(-days);
+}
+
+const styles = {
+  chart: {
+    height: 300,
+  },
+};
+
 const Container = styled.View`
-  align-items: center;
+  justify-content: flex-end;
+  align-items: stretch;
   height: 340px;
-  background-color: red;
 `;
+
+const IntervalContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
