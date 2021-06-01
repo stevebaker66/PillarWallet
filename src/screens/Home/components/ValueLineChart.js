@@ -23,6 +23,9 @@ import { VictoryChart, VictoryLine } from 'victory-native';
 import styled from 'styled-components/native';
 import { useTranslationWithPrefix } from 'translations/translate';
 
+// Controls
+import ValueOverTimeGraph from 'components/modern/ValueOverTimeGraph';
+
 // Utils
 import { useThemeColors } from 'utils/themes';
 
@@ -43,7 +46,7 @@ function ValueLineChart({ style }: Props) {
 
   const [activeInterval, setActiveInterval] = React.useState<?number>(7);
 
-  const chartData = usePriceChartData(activeInterval).map(({ balance, timestamp }) => ({ x: timestamp, y: balance }));
+  const chartData = usePriceChartData();
 
   const colors = useThemeColors();
 
@@ -56,40 +59,28 @@ function ValueLineChart({ style }: Props) {
   ];
 
   return (
-    <Container style={style}>
-      <VictoryChart height={300}>
-        <VictoryLine
-          data={chartData}
-          interpolation="natural"
-          style={{ data: { stroke: colors.lineChartLine, strokeWidth: 2.4, strokeLinecap: 'round' } }}
-        />
-      </VictoryChart>
-
-      <IntervalContainer>
-        {intervals.map(({ value, title }) => (
-          <SmallButton
-            key={title}
-            title={title}
-            onPress={() => setActiveInterval(value)}
-            active={value === activeInterval}
-          />
-        ))}
-      </IntervalContainer>
+    <Container>
+      <ValueOverTimeGraph data={chartData} />
     </Container>
   );
 }
 
 export default ValueLineChart;
 
-export type PriceChartDatum = {|
-  timestamp: string, // YYYY-MM-DD
-  balance: number,
+export type DataPoint = {|
+  date: Date,
+  value: number,
 |};
 
-export function usePriceChartData(days: ?number): PriceChartDatum[] {
-  if (!days) return priceChartData;
+export function usePriceChartData(): DataPoint[] {
+  const dataPoints = priceChartData.map(point => ({
+    date: new Date(point.timestamp),
+    value: point.balance,
+  }));
 
-  return priceChartData.slice(-days);
+  console.log("AAA", dataPoints);
+
+  return dataPoints;
 }
 
 const styles = {

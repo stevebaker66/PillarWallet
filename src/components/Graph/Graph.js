@@ -43,13 +43,13 @@ type Props = {
   width: number,
   height: number,
   getTooltipContents: (point: number) => string,
-  getXAxisValue: (x: number) => string,
-  getYAxisValue: (y: number) => string,
+  getXAxisValue?: (x: number) => string,
+  getYAxisValue?: (y: number) => string,
   extra: string,
   xAxisValuesCount: number,
   theme: Theme,
-  onGestureStart: () => void,
-  onGestureEnd: () => void,
+  onGestureStart?: () => void,
+  onGestureEnd?: () => void,
 };
 
 const range = (end: number): number[] => {
@@ -81,7 +81,7 @@ const Graph = ({
 
   const renderYAxis = () => {
     const yAxisValuesCount = 3;
-    const values = range(yAxisValuesCount).map(v => getYAxisValue((v + 1) / (yAxisValuesCount)));
+    const values = range(yAxisValuesCount).map(v => getYAxisValue?.((v + 1) / (yAxisValuesCount)));
 
     return (
       <ForeignObject width={width} height={height} x={graphPaddingHorizontal} y={0}>
@@ -102,7 +102,7 @@ const Graph = ({
   };
 
   const renderXAxis = () => {
-    const values = range(xAxisValuesCount).map(v => getXAxisValue(v / (xAxisValuesCount - 1)));
+    const values = range(xAxisValuesCount).map(v => getXAxisValue?.(v / (xAxisValuesCount - 1)));
     const valueWidth = 55;
 
     return (
@@ -198,7 +198,7 @@ const Graph = ({
     onMoveShouldSetPanResponder: () => true,
     onMoveShouldSetPanResponderCapture: () => true,
     onPanResponderGrant: (evt, gestureState) => {
-      onGestureStart();
+      onGestureStart?.();
       updateActivePoint(gestureState.x0);
     },
     onPanResponderMove: (evt, gestureState) => {
@@ -206,11 +206,11 @@ const Graph = ({
     },
     onPanResponderTerminationRequest: () => true,
     onPanResponderRelease: () => {
-      onGestureEnd();
+      onGestureEnd?.();
       return true;
     },
     onPanResponderTerminate: () => {
-      onGestureEnd();
+      onGestureEnd?.();
       return true;
     },
     onShouldBlockNativeResponder: () => true,
