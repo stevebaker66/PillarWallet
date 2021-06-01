@@ -24,11 +24,14 @@ import styled from 'styled-components/native';
 // Controls
 import ValueOverTimeGraph, { type DataPoint } from 'components/modern/ValueOverTimeGraph';
 
+// Selectors
+import { useRootSelector, useFiatCurrency, activeAccountAddressSelector } from 'selectors';
+
+// Services
+import etherspotService from 'services/etherspot';
 
 // Types
 import type { ViewStyleProp } from 'utils/types/react-native';
-
-import priceChartData from '../mockData.json';
 
 type Props = {|
   style?: ViewStyleProp;
@@ -37,22 +40,33 @@ type Props = {|
 function ValueLineChart({ style }: Props) {
   const chartData = useValueChartData();
 
-  return (
-    <Container style={style}>
-      <ValueOverTimeGraph data={chartData} />
-    </Container>
-  );
+  return <Container style={style}>{!!chartData.length && <ValueOverTimeGraph data={chartData} />}</Container>;
 }
 
 export default ValueLineChart;
 
 export function useValueChartData(): DataPoint[] {
-  const dataPoints = priceChartData.map(point => ({
-    date: new Date(point.timestamp),
-    value: point.balance,
-  }));
+  const accountAddress = useRootSelector(activeAccountAddressSelector);
+  const currency = useFiatCurrency();
+  const [data, setData] = React.useState([]);
 
-  return dataPoints;
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const dashboardData = await etherspotService.getDashboardData(accountAddress, currency, 10000);
+      if (!dashboardData) return;
+
+      setData(
+        dashboardData.history.map((point) => ({
+          date: new Date(point.timestamp),
+          value: point.balance,
+        })),
+      );
+    };
+
+    fetchData();
+  }, [accountAddress, currency]);
+
+  return data;
 }
 
 const Container = styled.View`

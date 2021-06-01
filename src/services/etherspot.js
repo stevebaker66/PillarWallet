@@ -368,7 +368,7 @@ class EtherspotService {
     return this.sdk
       .getAccountDashboard({
         account: accountAddress,
-        currency: currencySymbol.toLowerCase(),
+        currency: currencySymbol,
         days: periodInDays,
       })
       .catch((error) => {
