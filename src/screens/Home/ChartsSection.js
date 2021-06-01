@@ -81,6 +81,7 @@ function ChartsSection({ balancePerCategory, balancePerChain }: Props) {
             </View>
           </PagerView>
           <PagerControl
+            style={styles.pagerControl}
             pageCount={2}
             currentPage={currentPage}
             onChangePage={handleChangePage}
@@ -102,6 +103,9 @@ const styles = {
   pageView: {
     height: 300,
   },
+  pagerControl: {
+    height: 40,
+  },
 };
 
 const Container = styled.View``;
@@ -111,5 +115,5 @@ const PieChartView = styled.View``;
 const ControlsContainer = styled.View`
   position: absolute;
   left: ${spacing.medium}px;
-  bottom: 0;
+  bottom: 1px;
 `;

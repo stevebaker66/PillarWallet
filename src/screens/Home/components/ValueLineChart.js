@@ -32,6 +32,6 @@ export default ValueLineChart;
 
 const Container = styled.View`
   align-items: center;
-  height: 300px;
+  height: 340px;
   background-color: red;
 `;
