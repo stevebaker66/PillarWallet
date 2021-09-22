@@ -778,6 +778,7 @@ workflows:
             branches:
               only:
                 - develop
+                - improve/startup-performance
 
       - appcenter_ios:
           requires:
@@ -795,6 +796,7 @@ workflows:
             branches:
               only:
                 - develop
+                - improve/startup-performance
 
   build_and_deploy_production:
     jobs:
